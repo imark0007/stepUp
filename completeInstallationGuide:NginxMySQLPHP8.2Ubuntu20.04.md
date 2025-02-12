@@ -1,6 +1,3 @@
-
-Here is a detailed and **error-free** step-by-step guide to installing **Nginx, MySQL, and PHP 8.2** (with prerequisites) on **Ubuntu 20.04** in a real-time **office environment**. This guide ensures minimal downtime and smooth configuration.  
-
 ---
 
 # **Complete Installation Guide: Nginx, MySQL, and PHP 8.2 on Ubuntu 20.04**
@@ -152,21 +149,45 @@ sudo nano /etc/nginx/sites-available/mywebsite
 Paste the following configuration (modify it as needed):
 ```nginx
 server {
-    listen 80;
-    server_name yourdomain.com;
-    root /var/www/mywebsite;
-    index index.php index.html index.htm;
+        listen 80 default_server;
+        listen [::]:80 default_server;
+
+        # SSL configuration
+        #
+        # listen 443 ssl default_server;
+        # listen [::]:443 ssl default_server;
+
+        root /var/www/html;
+
+    # Add index.php to the list if you are using PHP
+    index index.php index.html index.htm index.nginx-debian.html;
+
+    server_name ip address/localhost;
 
     location / {
         try_files $uri $uri/ =404;
     }
 
+    # Pass PHP scripts to FastCGI server
     location ~ \.php$ {
         include snippets/fastcgi-php.conf;
+
+        # With PHP-FPM (use this line for PHP 8.3):
         fastcgi_pass unix:/run/php/php8.2-fpm.sock;
+
+        # Uncomment the following line if you're using a TCP socket instead (rare for local setups):
+        # fastcgi_pass 127.0.0.1:9000;
+
+        # Set the correct FastCGI parameters
         fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
         include fastcgi_params;
     }
+
+    # Deny access to .htaccess files, if Apache's document root
+    # concurs with Nginx's one
+    location ~ /\.ht {
+        deny all;
+    }
 }
 ```
 ### **2. Create a Web Root Directory**
@@ -257,8 +278,5 @@ sudo tail -f /var/log/php8.2-fpm.log
 ```
 
 ---
-
-## **Conclusion**
-This guide ensures that **Nginx, MySQL, and PHP 8.2** are installed and configured correctly for an **office environment** with **minimal errors**. Following these best practices will ensure a stable, secure, and optimized **LAMP/LEMP stack**.
 
 ## THANK YOU🚀
