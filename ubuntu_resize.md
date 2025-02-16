@@ -1,5 +1,3 @@
-Here is a complete step-by-step documentation on **Resizing Disk Space in Ubuntu 20.04 installed in a Proxmox VM** without affecting data.
-
 ---
 
 # **Resizing Ubuntu 20.04 Disk Space in a Proxmox VM**  
@@ -147,8 +145,3 @@ sudo resize2fs /dev/ubuntu-vg/root
 ```
 
 ---
-
-## **Conclusion**
-Following these steps, you successfully **increased the disk size in Proxmox and resized the partition inside Ubuntu 20.04** without losing data.
-
-Let me know if you need more help! 🚀
